@@ -1,0 +1,17 @@
+---
+- name: Deploy Docker container to EC2
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Pull latest image
+      shell: docker pull {{ docker_image }}
+
+    - name: Stop running container
+      shell: docker stop webapp || true
+
+    - name: Remove old container
+      shell: docker rm webapp || true
+
+    - name: Run new container
+      shell: docker run -d --name webapp -p 80:80 {{ docker_image }}
+
